@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEditor;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -7,11 +9,23 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float _damage;
     [SerializeField] private float _attackRange;
     [SerializeField] private float _timeBetweenAttack;
-
+    [Range(0, 180)][SerializeField] private float _attackAngle;
+    [SerializeField] private Vector3 _attackDirection;
+ 
     private float _timer;
+
+    public Vector2 AttackDirection { get => _attackDirection; }
 
     private void Update()
     {
+        float fireHorizontal = Input.GetAxisRaw("Mouse X");
+        float fireVertical = Input.GetAxisRaw("Mouse Y");
+
+        Vector3 mousePosition = new Vector2(Input.mousePosition.x - Screen.width / 2, Input.mousePosition.y - Screen.height / 2);
+        _attackDirection = (mousePosition - new Vector3(transform.position.x, transform.position.y, 0));
+
+        Debug.DrawLine(transform.position, _attackDirection, Color.blue);
+
         Attack();
     }
 
@@ -24,7 +38,7 @@ public class PlayerAttack : MonoBehaviour
 
     private  void Attack()
     {
-        if (Input.GetKey(KeyCode.J))
+        if (Input.GetMouseButton(0))
         {
             if (_timer <= 0)
             {
@@ -34,7 +48,14 @@ public class PlayerAttack : MonoBehaviour
                 {
                     for (int i = 0; i < enemies.Length; i++)
                     {
-                        enemies[i].GetComponent<DamageableObject>().ApllyDamage(_damage);
+                        Vector2 enemyDirection = (enemies[i].transform.position - transform.position);
+
+                        if (_attackAngle - Vector2.Angle(enemyDirection, _attackDirection) >= 0)
+                        {
+                            enemies[i].GetComponent<DamageableObject>().ApplyDamage(_damage);
+                        }
+                        
+                        // enemies[i].GetComponent<DamageableObject>().ApplyDamage(_damage);
                     }
                 }
 

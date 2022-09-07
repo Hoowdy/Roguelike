@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using UnityEditor;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -11,10 +10,12 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float _timeBetweenAttack;
     [Range(0, 180)][SerializeField] private float _attackAngle;
     [SerializeField] private Vector3 _attackDirection;
+    [SerializeField] private Vector3 _enemyDirection;
  
     private float _timer;
 
-    public Vector2 AttackDirection { get => _attackDirection; }
+    public static Vector3 attackDir;
+    public static Vector3 enemyDir;
 
     private void Update()
     {
@@ -23,6 +24,7 @@ public class PlayerAttack : MonoBehaviour
 
         Vector3 mousePosition = new Vector2(Input.mousePosition.x - Screen.width / 2, Input.mousePosition.y - Screen.height / 2);
         _attackDirection = (mousePosition - new Vector3(transform.position.x, transform.position.y, 0));
+        attackDir = _attackDirection;
 
         Debug.DrawLine(transform.position, _attackDirection, Color.blue);
 
@@ -49,13 +51,12 @@ public class PlayerAttack : MonoBehaviour
                     for (int i = 0; i < enemies.Length; i++)
                     {
                         Vector2 enemyDirection = (enemies[i].transform.position - transform.position);
+                        enemyDir = enemyDirection;
 
-                        if (_attackAngle - Vector2.Angle(enemyDirection, _attackDirection) >= 0)
+                        if (Vector2.Angle(enemyDirection, _attackDirection) <= _attackAngle)
                         {
                             enemies[i].GetComponent<DamageableObject>().ApplyDamage(_damage);
                         }
-                        
-                        // enemies[i].GetComponent<DamageableObject>().ApplyDamage(_damage);
                     }
                 }
 

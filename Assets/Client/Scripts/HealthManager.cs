@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class HealthManager : MonoBehaviour
 {
-    [SerializeField] private int _currentHealth;
-    [SerializeField] private int _protection;
-    [SerializeField] private int _shield;
+    [SerializeField] private float _currentHealth;
+    [SerializeField] private float _protection;
+    [SerializeField] private float _shield;
     [Range(0, 180)][SerializeField] private float _shieldAngle; 
-    [SerializeField] private int healCount;
-    private int _maxHealth = 10;
+    [SerializeField] private float healCount;
+    private float _maxHealth = 10;
 
     private Vector2 _attackDirection;
     private Vector2 _enemyDirection;
@@ -20,7 +20,7 @@ public class HealthManager : MonoBehaviour
         _attackDirection = PlayerAttack.attackDir;
         _enemyDirection = PlayerAttack.enemyDir;
 
-        if (Input.GetButtonDown("H"))
+        if (Input.GetKeyDown("h"))
         {
             HealPlayer(healCount);
         }
@@ -31,7 +31,8 @@ public class HealthManager : MonoBehaviour
         if (Input.GetMouseButton(1) || Vector3.Angle(_attackDirection, _enemyDirection) <= _shieldAngle)
         {
             _currentHealth -= Mathf.Clamp((damage - _shield) * (100 / (100 + _protection)), 0, _currentHealth);
-        } else
+        }
+        else
         {
             _currentHealth -= Mathf.Clamp(damage * (100 / (100 + _protection)), 0, _currentHealth);
         }
@@ -42,7 +43,7 @@ public class HealthManager : MonoBehaviour
         }
     }
 
-    private void HealPlayer(int healCount)
+    private void HealPlayer(float healCount)
     {
         _currentHealth += Mathf.Clamp(healCount, 0, _maxHealth - _currentHealth);
     }

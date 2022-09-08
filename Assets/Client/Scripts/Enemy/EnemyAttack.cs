@@ -31,12 +31,12 @@ public class EnemyAttack : MonoBehaviour
     }
     
 
-    private void OnCollisionStay2D(Collision2D other)
+    private void OnTriggerStay2D(Collision2D other)
     {
         _isAttack = true;
     }
 
-    private void OnCollisionExit2D(Collision2D other)
+    private void OnTriggerExit2D(Collision2D other)
     {
         _isAttack = false;
     }

@@ -8,9 +8,9 @@ public class EnemyAttack : MonoBehaviour
 {
     [SerializeField] private int _damage;
     
-    private HealthManager _healthManager;
-    private float _waitToAttack;
-    private bool _isAttack;
+    [SerializeField] private HealthManager _healthManager;
+    [SerializeField] private float _waitToAttack;
+    [SerializeField] private bool _isAttack;
 
     private void Awake()
     {
@@ -28,15 +28,16 @@ public class EnemyAttack : MonoBehaviour
                 _waitToAttack = 1f;
             }
         }
+        if (_waitToAttack >= 0)_waitToAttack -= Time.deltaTime;
     }
     
 
-    private void OnTriggerStay2D(Collision2D other)
+    private void OnTriggerStay2D(Collider2D other)
     {
         _isAttack = true;
     }
 
-    private void OnTriggerExit2D(Collision2D other)
+    private void OnTriggerExit2D(Collider2D other)
     {
         _isAttack = false;
     }

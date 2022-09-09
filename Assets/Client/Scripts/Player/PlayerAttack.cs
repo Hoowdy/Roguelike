@@ -9,6 +9,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float _attackRange;
     [SerializeField] private float _timeBetweenAttack;
     [Range(0, 180)][SerializeField] private float _attackAngle;
+    [SerializeField] private Vector3 _attackOffset;
     [SerializeField] private Vector3 _attackDirection;
     [SerializeField] private Vector3 _enemyDirection;
  
@@ -23,10 +24,10 @@ public class PlayerAttack : MonoBehaviour
         float fireVertical = Input.GetAxisRaw("Mouse Y");
 
         Vector3 mousePosition = new Vector2(Input.mousePosition.x - Screen.width / 2, Input.mousePosition.y - Screen.height / 2);
-        _attackDirection = (mousePosition - new Vector3(transform.position.x, transform.position.y, 0));
+        _attackDirection = (mousePosition - new Vector3(transform.position.x - _attackOffset.x, transform.position.y - _attackOffset.y, 0));
         attackDir = _attackDirection;
 
-        Debug.DrawLine(transform.position, _attackDirection, Color.blue);
+        Debug.DrawLine(transform.position - _attackOffset, _attackDirection, Color.blue);
 
         Attack();
     }
